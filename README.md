@@ -1,6 +1,3 @@
-
-
-````markdown
 # 🛒 Smart Inventory System
 
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
@@ -8,115 +5,127 @@
 [![MySQL](https://img.shields.io/badge/Database-MySQL-blue.svg)](https://www.mysql.com/)
 [![Build](https://img.shields.io/badge/Build-Maven-red.svg)](https://maven.apache.org/)
 
-> A robust backend system designed to manage product inventory, process real-time orders, and trigger automated low-stock alerts using **Spring Boot** and **RESTful Architecture**.
+A **production-ready backend system** for managing inventory, processing real-time orders, and generating automated stock alerts using **Spring Boot**, **REST APIs**, and **MySQL**.
+
+---
+
+## ⭐ Overview
+
+Smart Inventory System helps businesses automate product tracking, validate orders before processing, and receive instant alerts when stock reaches low levels.
 
 ---
 
 ## 🚀 Features
 
-### ✅ **Product Management**
-* **CRUD Operations:** Add, view, update, and delete products.
-* **Smart Cataloging:** Stores category, pricing, stock quantity, and minimum stock thresholds.
+### ✅ Product Management
 
-### 📦 **Transactional Order Processing**
-* **ACID Compliance:** Ensures stock is only reduced if the order is successfully recorded.
-* **Validation Logic:** Automatically prevents orders if stock is insufficient.
+* Full CRUD operations to add, read, update, and delete products
+* Category, price, stock quantity & minimum threshold tracking
 
-### ⚠️ **Automated Stock Alerts**
-* **Real-time Monitoring:** Checks inventory levels after every transaction.
-* **Alert System:** Triggers a warning response when stock dips below the defined `minStockLevel`.
+### 📦 Order Processing
+
+* **ACID-safe operations** ensuring consistent stock updates
+* Rejects orders automatically if stock is insufficient
+
+### ⚠️ Automated Low-Stock Alerts
+
+* Every order triggers a stock re-evaluation
+* Returns warnings when stock goes below `minStockLevel`
 
 ---
 
 ## 🧱 Tech Stack
 
-| Component | Technology | Description |
-| :--- | :--- | :--- |
-| **Backend** | Java 21 + Spring Boot | Core application logic |
-| **Database** | MySQL 8 | Relational data storage |
-| **ORM** | Hibernate / JPA | Database communication & mapping |
-| **API** | REST | Stateless communication endpoints |
-| **Tools** | Maven, IntelliJ IDEA, Postman | Build and testing tools |
+| Component            | Technology                    | Purpose                      |
+| -------------------- | ----------------------------- | ---------------------------- |
+| **Backend**          | Java 21 + Spring Boot         | Core application logic       |
+| **Database**         | MySQL 8                       | Relational data storage      |
+| **ORM**              | Hibernate / JPA               | Entity mapping & SQL queries |
+| **API Architecture** | REST                          | Stateless API communication  |
+| **Tools**            | Maven, IntelliJ IDEA, Postman | Build & testing              |
 
 ---
 
-## 📐 System Logic (Order Flow)
-
-This diagram represents how the system handles an incoming order request:
+## 📐 Order Processing Flow
 
 ```mermaid
 graph TD;
     A[User Places Order] --> B{Check Stock Availability};
-    B -- Yes (Stock > Order) --> C[Reduce Stock Quantity];
+    B -->|Yes| C[Reduce Stock];
     C --> D[Save Order to DB];
     D --> E{Check Min Stock Level};
-    E -- Below Threshold --> F[Return Success + LOW STOCK WARNING];
-    E -- Above Threshold --> G[Return Success];
-    B -- No --> H[Return Error: Insufficient Stock];
-````
+    E -->|Below Threshold| F[Return SUCCESS + LOW STOCK WARNING];
+    E -->|Above Threshold| G[Return SUCCESS];
+    B -->|No| H[Return ERROR: Insufficient Stock];
+```
 
------
+---
 
 ## 📁 Project Structure
 
-```bash
+```
 src/main/java/com/inventory/smart_inventory
 │
-├── controller      # Handles incoming HTTP requests (API Layer)
-│   └── ProductController.java
+├── controller
+│   └── ProductController.java          # Handles API requests
 │
-├── dto             # Data Transfer Objects (Input validation)
-│   └── OrderRequest.java
+├── dto
+│   └── OrderRequest.java               # Request validation DTOs
 │
-├── model           # Database Entities (Tables)
-│   ├── Product.java
-│   └── OrderRecord.java
+├── model
+│   ├── Product.java                    # Product entity
+│   └── OrderRecord.java                # Order entity
 │
-├── repository      # Database Access Layer (SQL operations)
+├── repository
 │   ├── ProductRepository.java
-│   └── OrderRepository.java
+│   └── OrderRepository.java            # DB access layer
 │
-└── service         # Business Logic (The "Smart" part)
-    └── ProductService.java
+└── service
+    └── ProductService.java             # Business logic layer
 ```
 
------
+---
 
 ## ⚙️ Setup Instructions
 
-### **1️⃣ Clone the Repository**
+### 1️⃣ Clone the Repository
 
 ```bash
-git clone [https://github.com/Navi-1105/Smart-Inventory.git](https://github.com/Navi-1105/Smart-Inventory.git)
+git clone https://github.com/Navi-1105/Smart-Inventory.git
 cd Smart-Inventory
 ```
 
-### **2️⃣ Configure Database**
+### 2️⃣ Configure Database
 
-1.  Open MySQL Workbench and run:
-    ```sql
-    CREATE DATABASE inventory_db;
-    ```
-2.  Open `src/main/resources/application.properties` and update:
-    ```properties
-    spring.datasource.url=jdbc:mysql://localhost:3306/inventory_db
-    spring.datasource.username=root
-    spring.datasource.password=YOUR_PASSWORD
-    ```
+Create a database in MySQL:
 
-### **3️⃣ Run the Application**
+```sql
+CREATE DATABASE inventory_db;
+```
 
-Run the main class `SmartInventoryApplication.java` in IntelliJ, or use terminal:
+Configure the database connection:
+
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/inventory_db
+spring.datasource.username=root
+spring.datasource.password=YOUR_PASSWORD
+```
+
+### 3️⃣ Run the Application
+
+Using Maven:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
------
+Or run `SmartInventoryApplication.java` via IntelliJ.
+
+---
 
 ## 🧪 API Endpoints
 
-### 📌 1. Add a Product
+### 📌 Add a Product
 
 **POST** `/api/products`
 
@@ -130,7 +139,7 @@ Run the main class `SmartInventoryApplication.java` in IntelliJ, or use terminal
 }
 ```
 
-### 📌 2. Place an Order
+### 📌 Place an Order
 
 **POST** `/api/order`
 
@@ -141,22 +150,17 @@ Run the main class `SmartInventoryApplication.java` in IntelliJ, or use terminal
 }
 ```
 
-**Response (Example):**
+**Sample Response:**
 
-> "Order processed successfully\! ⚠️ Warning: Stock is low (3 remaining)."
+```
+"Order processed successfully! ⚠️ Warning: Stock is low (3 remaining)."
+```
 
------
+---
 
 ## 👩‍💻 Author
 
 **Navneet**
+GitHub: [https://github.com/Navi-1105](https://github.com/Navi-1105)
 
-  * **GitHub:** [Navi-1105](https://github.com/Navi-1105)
-
------
-
-⭐ **Star this repo if you found it useful\!**
-
-```
-
----
+⭐ *If this project helped you, please consider giving it a star!*
